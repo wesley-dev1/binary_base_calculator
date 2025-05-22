@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """Calculadora de Conversão Binária e de Bases
 
@@ -35,7 +34,7 @@ def bin_to_dec(bin_str: str) -> int:
 
 def dec_to_bin(dec_str: str) -> str:
     try:
-        return bin(int(dec_str))[2:]
+        return bin(int(dec_str))[5:]
     except ValueError:
         raise ValueError("Entrada decimal inválida.")
 
