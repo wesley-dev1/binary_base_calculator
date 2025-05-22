@@ -1,16 +1,16 @@
 
 #!/usr/bin/env python3
-"""Binary & Base Conversion Calculator
+"""Calculadora de Conversão Binária e de Bases
 
-Features
+Recursos
 --------
-1. Convert between hexadecimal ↔ binary, decimal ↔ binary/hexadecimal.
-2. Perform arithmetic on binary numbers: addition, subtraction,
-   multiplication, and division (integer division and remainder).
+1. Converter entre hexadecimal ↔ binário, decimal ↔ binário/hexadecimal.
+2. Realizar operações aritméticas com números binários: adição, subtração,
+   multiplicação e divisão (divisão inteira e resto).
 
-Usage
------
-Run the script and follow the interactive menu.
+Uso
+----
+Execute o script e siga o menu interativo.
 """
 
 import sys
