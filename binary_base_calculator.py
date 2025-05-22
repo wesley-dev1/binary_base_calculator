@@ -11,8 +11,6 @@ Features
 Usage
 -----
 Run the script and follow the interactive menu.
-
-Author: ChatGPT (OpenAI)
 """
 
 import sys
