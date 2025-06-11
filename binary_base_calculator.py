@@ -15,11 +15,11 @@ Execute o script e siga o menu interativo.
 import sys
 
 def hex_to_bin(hex_str: str) -> str:
-    # Remove o prefixo 0x se existir
-    if hex_str.startswith('0x') or hex_str.startswith('0X'):
-        hex_str = hex_str[2:]
+    sign = '-' if hex_str.startswith('-') else ''
+    # Remove sinal e possível prefixo 0x/0X
+    clean = hex_str.lstrip('+-').lstrip('0x').lstrip('0X')
     try:
-        return bin(int(hex_str, 16))[2:]
+        return sign + bin(int(clean, 16))[2:]
     except ValueError:
         raise ValueError("Entrada hexadecimal inválida.")
 
@@ -33,17 +33,13 @@ def validate_binary(bin_str: str):
             raise ValueError("Entrada binária inválida. Use apenas 0s e 1s.")
 
 def bin_to_hex(bin_str: str) -> str:
+    sign = '-' if bin_str.startswith('-') else ''
+    clean = bin_str.lstrip('+-')
+    validate_binary(clean)
     try:
-        validate_binary(bin_str)
-        # Trata números negativos
-        if bin_str.startswith('-'):
-            num = -int(bin_str[1:], 2)
-        else:
-            num = int(bin_str, 2)
-        hex_result = hex(num)[2:].upper()
-        return hex_result if not hex_result.startswith('-') else '-' + hex_result[1:]
-    except ValueError as e:
-        raise e
+        return sign + hex(int(clean, 2))[2:].upper()
+    except ValueError:
+        raise ValueError("Entrada binária inválida.")
 
 def bin_to_dec(bin_str: str) -> int:
     try:
