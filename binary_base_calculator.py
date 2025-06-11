@@ -34,17 +34,25 @@ def bin_to_dec(bin_str: str) -> int:
 
 def dec_to_bin(dec_str: str) -> str:
     try:
-        return bin(int(dec_str))[5:]
+        return bin(int(dec_str))[2:]  # Corrigido aqui
     except ValueError:
         raise ValueError("Entrada decimal inválida.")
 
-def dec_to_hex(dec_str: str) -> str:
+def validate_binary(bin_str: str):
+    if not all(char in '01' for char in bin_str):
+        raise ValueError("Entrada binária inválida. Use apenas 0s e 1s.")
+
+def bin_to_hex(bin_str: str) -> str:
     try:
-        return hex(int(dec_str))[2:].upper()
-    except ValueError:
-        raise ValueError("Entrada decimal inválida.")
+        validate_binary(bin_str)  # Valida entrada
+        return hex(int(bin_str, 2))[2:].upper()
+    except ValueError as e:
+        raise e
 
 def calculate_binary(op: str, a_str: str, b_str: str) -> str:
+    validate_binary(a_str)
+    validate_binary(b_str)
+    
     a = bin_to_dec(a_str)
     b = bin_to_dec(b_str)
 
