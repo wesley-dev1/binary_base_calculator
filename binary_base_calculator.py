@@ -15,39 +15,65 @@ Execute o script e siga o menu interativo.
 import sys
 
 def hex_to_bin(hex_str: str) -> str:
+    # Remove o prefixo 0x se existir
+    if hex_str.startswith('0x') or hex_str.startswith('0X'):
+        hex_str = hex_str[2:]
     try:
         return bin(int(hex_str, 16))[2:]
     except ValueError:
         raise ValueError("Entrada hexadecimal inválida.")
 
+def validate_binary(bin_str: str):
+    if bin_str.startswith('-'):
+        # Valida a parte após o sinal de negativo
+        if not all(char in '01' for char in bin_str[1:]):
+            raise ValueError("Entrada binária inválida. Use apenas 0s e 1s.")
+    else:
+        if not all(char in '01' for char in bin_str):
+            raise ValueError("Entrada binária inválida. Use apenas 0s e 1s.")
+
 def bin_to_hex(bin_str: str) -> str:
     try:
-        return hex(int(bin_str, 2))[2:].upper()
-    except ValueError:
-        raise ValueError("Entrada binária inválida.")
+        validate_binary(bin_str)
+        # Trata números negativos
+        if bin_str.startswith('-'):
+            num = -int(bin_str[1:], 2)
+        else:
+            num = int(bin_str, 2)
+        hex_result = hex(num)[2:].upper()
+        return hex_result if not hex_result.startswith('-') else '-' + hex_result[1:]
+    except ValueError as e:
+        raise e
 
 def bin_to_dec(bin_str: str) -> int:
     try:
+        validate_binary(bin_str)
+        # Trata números negativos
+        if bin_str.startswith('-'):
+            return -int(bin_str[1:], 2)
         return int(bin_str, 2)
-    except ValueError:
-        raise ValueError("Entrada binária inválida.")
+    except ValueError as e:
+        raise e
 
 def dec_to_bin(dec_str: str) -> str:
     try:
-        return bin(int(dec_str))[2:]  # Corrigido aqui
+        num = int(dec_str)
+        # Trata números negativos
+        if num < 0:
+            return '-' + bin(abs(num))[2:]
+        return bin(num)[2:]
     except ValueError:
         raise ValueError("Entrada decimal inválida.")
 
-def validate_binary(bin_str: str):
-    if not all(char in '01' for char in bin_str):
-        raise ValueError("Entrada binária inválida. Use apenas 0s e 1s.")
-
-def bin_to_hex(bin_str: str) -> str:
+def dec_to_hex(dec_str: str) -> str:
     try:
-        validate_binary(bin_str)  # Valida entrada
-        return hex(int(bin_str, 2))[2:].upper()
-    except ValueError as e:
-        raise e
+        num = int(dec_str)
+        # Trata números negativos
+        if num < 0:
+            return '-' + hex(abs(num))[2:].upper()
+        return hex(num)[2:].upper()
+    except ValueError:
+        raise ValueError("Entrada decimal inválida.")
 
 def calculate_binary(op: str, a_str: str, b_str: str) -> str:
     validate_binary(a_str)
@@ -67,11 +93,12 @@ def calculate_binary(op: str, a_str: str, b_str: str) -> str:
             raise ZeroDivisionError("Divisão por zero não é permitida.")
         quotient = a // b
         remainder = a % b
-        return f'Quociente: {bin(quotient)[2:]}, Resto: {bin(remainder)[2:]}'
+        return f'Quociente: {dec_to_bin(str(quotient))}, Resto: {dec_to_bin(str(remainder))}'
     else:
         raise ValueError("Operação inválida.")
 
-    return bin(result)[2:]
+    # Converte o resultado de volta para binário
+    return dec_to_bin(str(result))
 
 def conversion_menu():
     print("\n*** Conversão de Bases ***")
@@ -85,7 +112,7 @@ def conversion_menu():
 
     try:
         if choice == '1':
-            h = input("Hexadecimal (sem 0x): ")
+            h = input("Hexadecimal (com ou sem 0x): ")
             print("Binário:", hex_to_bin(h))
         elif choice == '2':
             b = input("Binário: ")
